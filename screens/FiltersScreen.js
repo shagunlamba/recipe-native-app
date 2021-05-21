@@ -4,6 +4,8 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import Colors from '../constants/Colors';
 
+import { useDispatch } from 'react-redux';
+import { setFilters } from '../store/actions/meals';
 
 const FilterSwitch = (props) =>{
     return (
@@ -16,14 +18,14 @@ const FilterSwitch = (props) =>{
                     thumbColor={Platform.OS==='android'? Colors.primaryColor: ''}
                 />
         </View>
-
     )
 }
 
 const FiltersScreen = (props) => {
 
-    const { navigation } = props;
+    const dispatch = useDispatch();
 
+    const { navigation } = props;
     const [isGlutenFree, setGlutenFree]= useState(false);
     const [isLactoseFree, setLactoseFree]= useState(false);
     const [isVegan, setVegan]=useState(false);
@@ -36,7 +38,7 @@ const FiltersScreen = (props) => {
             vegan: isVegan,
             isVeg: isVeg
         }
-        console.log("Here",appliedFilters);
+      dispatch(setFilters(appliedFilters));
     },[isGlutenFree, isLactoseFree, isVegan, isVeg]);
 
     useEffect(()=>{
@@ -88,7 +90,7 @@ FiltersScreen.navigationOptions = (navData)=> {
                 }}
             />
         </HeaderButtons>),
-        headerRight: (<HeaderButtons HeaderButtonComponent={HeaderButton}>
+        headerRight: ()=> (<HeaderButtons HeaderButtonComponent={HeaderButton}>
             <Item 
                 title="Save" 
                 iconName="ios-save" 
